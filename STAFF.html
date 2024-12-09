@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Golden Town | الاداره المتصله</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #7b222a;
+    }
+    .admin {
+      margin: 10px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 200px;
+    }
+    .online {
+      color: green;
+    }
+    .offline {
+      color: red;
+    }
+    .idle {
+      color: orange;
+    }
+    .dnd {
+      color: purple;
+    }
+    .unknown {
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <h1>حالة الإداريين</h1>
+  <div id="admins"></div>
+
+  <script>
+    const fetchStatuses = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/statuses'); // تأكد من أن الرابط صحيح
+        const statuses = await response.json();
+        const adminContainer = document.getElementById('admins');
+        adminContainer.innerHTML = ''; // تفريغ المحتوى القديم
+
+        for (const [id, status] of Object.entries(statuses)) {
+          const div = document.createElement('div');
+          div.className = `admin ${status}`;
+          div.textContent = `Admin ID: ${id} - Status: ${status}`;
+          adminContainer.appendChild(div);
+        }
+      } catch (error) {
+        console.error('Error fetching statuses:', error);
+      }
+    };
+
+    setInterval(fetchStatuses, 5000); // تحديث كل 5 ثوانٍ
+    fetchStatuses();
+  </script>
+</body>
+</html>
